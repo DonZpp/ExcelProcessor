@@ -36,6 +36,11 @@ nOldTableMaxCol = 40
 strEmpty = 'Empty'
 
 
+# 上课天数
+WORK_DAY = 5
+CURR_NUM_PER_DAY = 8
+
+
 def OpenTchWB():
     os.chdir(strTchWBDir)
     return openpyxl.load_workbook(strTchWBName)
@@ -129,6 +134,26 @@ class ClsData:
         self.strClsName = strClsName
         self.dicCurrs = {}
         self.dicCurrs[sCI.GetKey()] = sCI
+
+
+class Schedule:
+    def __init__(self):
+        self.Sch = {}
+    
+    # get next empty position in the schedule 
+    def GetEmptyPos(self, strClsName):
+        if strClsName in self.Sch.keys():
+            nIndex = 1
+            while nIndex <= WORK_DAY * CURR_NUM_PER_DAY:
+                if (self.Sch[strClsName][nIndex] == None):
+                    return nIndex
+                nIndex = nIndex + 1
+        else:
+            self.Sch[strClsName] = {}
+            nIndex = 1
+            while nIndex <= WORK_DAY * CURR_NUM_PER_DAY:
+                self.Sch[strClsName][nIndex] = None
+            return 1
 
 
 class IterStack:
